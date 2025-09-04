@@ -3,531 +3,135 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Sign in</title>
+  <title>Login | Blaqbad</title>
   <meta name="color-scheme" content="light dark" />
   <style>
-    :root{
-      --bg: #0b1020;
-      --bg-2: #0f1630;
-      --card: #111933;
-      --text: #e7ecff;
-      --muted: #9fb0ffb0;
-      --accent: #6a8cff;
-      --accent-2: #3bd1ff;
-      --invalid: #ff7272;
-      --valid: #47d18c;
-      --ring: #99b3ff66;
-      --shadow: 0 10px 30px rgba(0,0,0,.35);
-      --radius: 16px;
-      --speed: .25s;
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: linear-gradient(135deg, #3b5cff, #00a2ff);
+      margin: 0;
     }
-    @media (prefers-color-scheme: light){
-      :root{
-        --bg:#f4f6ff;
-        --bg-2:#e9edff;
-        --card:#ffffff;
-        --text:#0c1330;
-        --muted:#4a5a87b0;
-        --accent:#3b5cff;
-        --accent-2:#00a2ff;
-        --invalid:#d13b3b;
-        --valid:#1e9e63;
-        --ring:#3b5cff33;
-        --shadow:0 10px 30px rgba(25,35,75,.15);
-      }
+    .card {
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+      width: 320px;
     }
-
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji";
-      color:var(--text);
-      background:
-        radial-gradient(1200px 600px at 10% -10%, var(--bg-2), transparent 60%),
-        radial-gradient(1000px 700px at 110% 20%, var(--accent-2) 0%, transparent 40%),
-        linear-gradient(180deg, var(--bg), var(--bg));
-      display:grid;
-      place-items:center;
-      padding:24px;
+    h1 {
+      margin: 0 0 20px;
+      font-size: 1.4rem;
+      text-align: center;
     }
-
-    /* Floating glassy card */
-    .card{
-      position:relative;
-      width:100%;
-      max-width:420px;
-      background: color-mix(in hsl, var(--card), transparent 5%);
-      border:1px solid color-mix(in hsl, var(--text), transparent 90%);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      overflow:hidden;
-      padding:26px;
-      backdrop-filter: blur(6px) saturate(120%);
-      transition:transform var(--speed) ease;
+    .field {
+      position: relative;
+      margin-bottom: 18px;
     }
-    .card:hover{ transform:translateY(-2px) }
-
-    /* Header */
-    .brand{
-      display:flex; align-items:center; gap:10px; margin-bottom:14px;
+    .field input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      outline: none;
+      font-size: 14px;
     }
-    .logo{
-      width:36px; height:36px; border-radius:10px;
-      background: conic-gradient(from 140deg, var(--accent), var(--accent-2));
-      box-shadow: 0 6px 18px color-mix(in hsl, var(--accent), transparent 60%);
+    .field label {
+      position: absolute;
+      left: 12px;
+      top: -8px;
+      background: #fff;
+      padding: 0 5px;
+      font-size: 12px;
+      color: #555;
     }
-    h1{ font-size:1.35rem; margin:0 }
-    p.lead{ margin:.25rem 0 1rem; color:var(--muted); font-size:.95rem }
-
-    /* Form */
-    form{ display:grid; gap:14px; }
-
-    .field{
-      position:relative;
+    .btn {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background: #3b5cff;
+      color: #fff;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
     }
-    .input{
-      width:100%;
-      padding:14px 44px 14px 14px;
-      border-radius:12px;
-      border:1px solid color-mix(in hsl, var(--text), transparent 85%);
-      background: color-mix(in hsl, var(--card), transparent 10%);
-      color:var(--text);
-      outline:none;
-      transition:border var(--speed), box-shadow var(--speed), background var(--speed);
-      font-size:0.98rem;
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
     }
-    .input::placeholder{ color:transparent }
-    .input:focus{
-      border-color:var(--accent);
-      box-shadow:0 0 0 6px var(--ring);
-    }
-    .field.invalid .input{ border-color: var(--invalid) }
-    .field.valid .input{ border-color: var(--valid) }
-
-    .label{
-      position:absolute; left:12px; top:50%;
-      transform:translateY(-50%);
-      padding:0 6px;
-      color:var(--muted);
-      pointer-events:none;
-      transition: all var(--speed) ease;
-      background:transparent;
-    }
-    .input:focus + .label,
-    .input:not(:placeholder-shown) + .label{
-      top:-8px; transform:none;
-      font-size:.75rem; color: var(--accent);
-      background: var(--card);
-      border-radius:8px;
-    }
-    .hint{
-      display:flex; align-items:center; gap:8px;
-      min-height:22px; font-size:.85rem; color:var(--muted);
-      padding:0 2px;
-    }
-    .hint.error{ color:var(--invalid) }
-    .hint.ok{ color:var(--valid) }
-
-    /* Icon buttons inside fields */
-    .icon-btn{
-      position:absolute; right:8px; top:50%; transform:translateY(-50%);
-      border:none; background:transparent; cursor:pointer;
-      width:32px; height:32px; border-radius:10px;
-      display:grid; place-items:center;
-      color:var(--muted);
-      transition: background var(--speed), color var(--speed);
-    }
-    .icon-btn:hover{ background: color-mix(in hsl, var(--text), transparent 90%); color:var(--text) }
-
-    /* Strength meter */
-    .meter{
-      height:8px; width:100%;
-      background: color-mix(in hsl, var(--text), transparent 92%);
-      border-radius:999px;
-      overflow:hidden;
-    }
-    .meter-bar{
-      height:100%; width:0%;
-      background: linear-gradient(90deg, #ff6b6b, #ffd166, #06d6a0, #4cc9f0);
-      transition: width .35s ease;
-    }
-    .caps{ font-size:.8rem; color:var(--invalid); display:none }
-    .caps.show{ display:inline }
-
-    .row{
-      display:flex; align-items:center; justify-content:space-between; gap:10px;
-      margin-top:2px;
-    }
-
-    .actions{ display:flex; gap:10px; align-items:center; justify-content:space-between; }
-
-    /* Buttons */
-    .btn{
-      appearance:none;
-      border:none;
-      border-radius:12px;
-      padding:12px 14px;
-      font-weight:600;
-      cursor:pointer;
-      background:linear-gradient(135deg, var(--accent), var(--accent-2));
-      color:white;
-      box-shadow: 0 8px 20px color-mix(in hsl, var(--accent), transparent 60%);
-      transition: transform .12s ease, box-shadow .2s ease, opacity .2s ease;
-    }
-    .btn:disabled{ opacity:.6; cursor:not-allowed; box-shadow:none }
-    .btn:hover:not(:disabled){ transform: translateY(-1px) }
-    .btn.secondary{
-      background: color-mix(in hsl, var(--text), transparent 90%);
-      color: var(--text);
-      box-shadow:none;
-    }
-
-    /* Submit feedback */
-    .btn .spinner, .btn .check{
-      width:18px; height:18px; vertical-align:-3px; margin-left:8px; display:none;
-    }
-    .btn.loading .spinner{ display:inline-block; animation:spin 1s linear infinite }
-    .btn.success .check{ display:inline-block }
-    @keyframes spin{ to{ transform:rotate(360deg) } }
-
-    /* Dark-mode toggle */
-    .toolbar{
-      display:flex; align-items:center; justify-content:space-between;
-      margin-bottom:10px;
-    }
-    .toggle{
-      display:inline-flex; align-items:center; gap:8px;
-      font-size:.9rem; color:var(--muted);
-      user-select:none; cursor:pointer;
-    }
-    .switch{
-      width:44px; height:26px; border-radius:999px; background: color-mix(in hsl, var(--text), transparent 90%);
-      position:relative; transition:background var(--speed)
-    }
-    .knob{
-      position:absolute; top:3px; left:3px; width:20px; height:20px; border-radius:50%;
-      background: white; box-shadow: 0 2px 6px rgba(0,0,0,.25);
-      transition:left var(--speed)
-    }
-    .switch[aria-checked="true"] .knob{ left:21px }
-
-    /* Subtle background orbs */
-    .orb{
-      position:absolute; filter: blur(40px); opacity:.5; z-index:-1;
-      width:240px; height:240px; border-radius:50%;
-      background: radial-gradient(circle at 30% 30%, var(--accent), transparent 60%);
-      top:-60px; right:-60px;
-      animation: float 10s ease-in-out infinite alternate;
-    }
-    .orb2{
-      background: radial-gradient(circle at 60% 60%, var(--accent-2), transparent 60%);
-      bottom:-70px; left:-60px; width:260px; height:260px; animation-delay: -3s;
-    }
-    @keyframes float{
-      to{ transform: translate(10px, 10px) scale(1.05) }
-    }
-
-    .links{ display:flex; justify-content:space-between; margin-top:6px; }
-    a{ color:var(--accent); text-decoration:none }
-    a:hover{ text-decoration:underline }
-
-    /* Accessibility-only text */
-    .sr-only{
-      position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden;
-      clip:rect(0,0,0,0); white-space:nowrap; border:0;
+    #msg {
+      margin-top: 12px;
+      font-size: 14px;
+      text-align: center;
     }
   </style>
 </head>
 <body>
-  <main class="card" role="main" aria-labelledby="title">
-    <div class="orb"></div><div class="orb orb2"></div>
-
-    <div class="toolbar">
-      <div class="brand" aria-hidden="true">
-        <div class="logo" aria-hidden="true"></div>
-        <div>
-          <h1 id="title">Welcome back</h1>
-          <p class="lead">Sign in to continue</p>
-        </div>
+  <main class="card">
+    <h1>Login</h1>
+    <form id="loginForm">
+      <div class="field">
+        <input id="email" type="email" placeholder="Email" required />
+        <label for="email">Email</label>
       </div>
-
-      <button id="modeToggle" class="toggle" type="button" aria-pressed="false" title="Toggle dark mode">
-        <span aria-hidden="true">🌗</span>
-        <span>Theme</span>
-        <span class="switch" role="switch" aria-checked="false"><span class="knob"></span></span>
-      </button>
-    </div>
-
-    <form id="form" novalidate>
-      <!-- Email -->
-      <div class="field" id="emailField">
-        <input
-          id="email"
-          name="email"
-          class="input"
-          type="email"
-          inputmode="email"
-          autocomplete="email"
-          placeholder="Email"
-          aria-describedby="emailHint"
-          required />
-        <label for="email" class="label">Email</label>
-        <button class="icon-btn" type="button" tabindex="-1" aria-hidden="true">
-          ✉️
-        </button>
-        <div id="emailHint" class="hint">Use your school or work email</div>
+      <div class="field">
+        <input id="password" type="password" placeholder="Password" required />
+        <label for="password">Password</label>
       </div>
-
-      <!-- Password -->
-      <div class="field" id="pwField">
-        <input
-          id="password"
-          name="password"
-          class="input"
-          type="password"
-          autocomplete="current-password"
-          placeholder="Password"
-          aria-describedby="pwHint"
-          required minlength="6" />
-        <label for="password" class="label">Password</label>
-        <button id="togglePw" class="icon-btn" type="button" aria-label="Show password" title="Show password">👁️</button>
-        <div class="row">
-          <div class="hint" id="pwHint">Minimum 6 characters</div>
-          <span class="caps" id="caps">Caps Lock is ON</span>
-        </div>
-      </div>
-
-      <!-- Strength meter -->
-      <div class="meter" aria-hidden="true"><div id="meterBar" class="meter-bar"></div></div>
-      <div class="hint" id="strengthText" aria-live="polite"></div>
-
-      <div class="actions">
-        <label class="toggle" aria-label="Remember me">
-          <input type="checkbox" id="remember" class="sr-only" />
-          <span class="switch" aria-checked="false"><span class="knob"></span></span>
-          <span>Remember me</span>
-        </label>
-        <a href="#" id="forgot">Forgot password?</a>
-      </div>
-
-      <button id="submitBtn" class="btn" type="submit" disabled>
-        Sign in
-        <svg class="spinner" viewBox="0 0 50 50"><circle cx="25" cy="25" r="20" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-dasharray="90 150" stroke-dashoffset="0"/></svg>
-        <svg class="check" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.3 5.7a1 1 0 0 1 0 1.4l-10 10a1 1 0 0 1-1.4 0l-5-5a1 1 0 1 1 1.4-1.4l4.3 4.3 9.3-9.3a1 1 0 0 1 1.4 0z"/></svg>
-      </button>
-
-      <div class="links">
-        <a href="#" id="create">Create account</a>
-        <a href="#" id="help">Need help?</a>
-      </div>
+      <button id="loginBtn" class="btn" type="submit">Login</button>
+      <p id="msg"></p>
     </form>
   </main>
 
-  <script>
-    // Helpers
-    const $ = (sel, root=document) => root.querySelector(sel);
-    const add = (el, cls) => el.classList.add(cls);
-    const rm = (el, cls) => el.classList.remove(cls);
+  <!-- Firebase SDKs -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
 
-    const email = $('#email');
-    const emailField = $('#emailField');
-    const emailHint = $('#emailHint');
+    // ✅ Your Firebase config (direct from Firebase console)
+    const firebaseConfig = {
+      apiKey: "AIzaSyDSpjUwk8Rz_ErvyZ4YbMeTQfg_lRrGc8E",
+      authDomain: "blaqbad.firebaseapp.com",
+      projectId: "blaqbad",
+      storageBucket: "blaqbad.appspot.com",
+      messagingSenderId: "197694917502",
+      appId: "1:197694917502:web:3f2a6f71b9b8934dfb07a3"
+    };
 
-    const pw = $('#password');
-    const pwField = $('#pwField');
-    const pwHint = $('#pwHint');
-    const caps = $('#caps');
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
 
-    const meterBar = $('#meterBar');
-    const strengthText = $('#strengthText');
+    // Login form handler
+    const form = document.getElementById("loginForm");
+    const msg = document.getElementById("msg");
+    const loginBtn = document.getElementById("loginBtn");
 
-    const submitBtn = $('#submitBtn');
-    const form = $('#form');
-
-    const modeToggle = $('#modeToggle');
-    const switchEl = modeToggle.querySelector('.switch');
-
-    const remember = $('#remember');
-
-    // Floating label state is handled by CSS via :placeholder-shown
-
-    // Theme toggle
-    const preferred = localStorage.getItem('theme');
-    if (preferred) {
-      document.documentElement.dataset.theme = preferred;
-      const dark = preferred === 'dark';
-      modeToggle.setAttribute('aria-pressed', dark);
-      switchEl.setAttribute('aria-checked', dark);
-    }
-    modeToggle.addEventListener('click', () => {
-      const isDark = document.documentElement.dataset.theme === 'dark';
-      const next = isDark ? 'light' : 'dark';
-      document.documentElement.dataset.theme = next;
-      modeToggle.setAttribute('aria-pressed', String(next === 'dark'));
-      switchEl.setAttribute('aria-checked', String(next === 'dark'));
-      localStorage.setItem('theme', next);
-    });
-
-    // Remember me visual sync
-    const rememberSwitch = modeToggle.cloneNode(false); // (unused but shows pattern)
-    document.querySelector('label.toggle .switch').addEventListener('click', (e)=>{
-      const checked = e.currentTarget.getAttribute('aria-checked') !== 'true';
-      e.currentTarget.setAttribute('aria-checked', checked);
-      $('#remember').checked = checked;
-    });
-
-    // Email validation (live)
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
-    function validateEmail() {
-      const v = email.value.trim();
-      if (!v) {
-        rm(emailField, 'valid'); rm(emailField, 'invalid');
-        emailHint.textContent = 'Use your school or work email';
-        return false;
-      }
-      const ok = emailRegex.test(v);
-      if (ok) {
-        add(emailField, 'valid'); rm(emailField, 'invalid');
-        emailHint.textContent = 'Looks good';
-        emailHint.className = 'hint ok';
-      } else {
-        add(emailField, 'invalid'); rm(emailField, 'valid');
-        emailHint.textContent = 'Please enter a valid email (e.g. name@domain.com)';
-        emailHint.className = 'hint error';
-      }
-      return ok;
-    }
-    email.addEventListener('input', () => { validateEmail(); updateSubmitState(); });
-
-    // Password visibility toggle
-    $('#togglePw').addEventListener('click', () => {
-      const show = pw.type === 'password';
-      pw.type = show ? 'text' : 'password';
-      $('#togglePw').setAttribute('aria-label', show ? 'Hide password' : 'Show password');
-      $('#togglePw').textContent = show ? '🙈' : '👁️';
-      pw.focus();
-    });
-
-    // Caps lock detection
-    pw.addEventListener('keydown', (e) => {
-      if (e.getModifierState && typeof e.getModifierState === 'function') {
-        caps.classList.toggle('show', e.getModifierState('CapsLock'));
-      }
-    });
-    pw.addEventListener('keyup', (e) => {
-      if (e.getModifierState) caps.classList.toggle('show', e.getModifierState('CapsLock'));
-    });
-    pw.addEventListener('blur', ()=> caps.classList.remove('show'));
-
-    // Password strength (simple heuristic)
-    function scorePassword(s) {
-      let score = 0;
-      if (!s) return 0;
-      const letters = {};
-      for (let i=0; i<s.length; i++) {
-        letters[s[i]] = (letters[s[i]] || 0) + 1;
-        score += 5.0 / letters[s[i]];
-      }
-      const variations = {
-        digits: /\d/.test(s),
-        lower: /[a-z]/.test(s),
-        upper: /[A-Z]/.test(s),
-        nonWords: /[^A-Za-z0-9]/.test(s),
-        length8: s.length >= 8,
-        length12: s.length >= 12
-      };
-      let variationCount = 0;
-      for (let check in variations) variationCount += variations[check] ? 1 : 0;
-      score += (variationCount - 1) * 10;
-      return Math.min(100, Math.floor(score));
-    }
-    function strengthLabel(score){
-      if (score < 25) return 'Very weak';
-      if (score < 45) return 'Weak';
-      if (score < 70) return 'Good';
-      if (score < 90) return 'Strong';
-      return 'Excellent';
-    }
-    function validatePassword(){
-      const val = pw.value;
-      if (!val){
-        rm(pwField,'valid'); rm(pwField,'invalid');
-        pwHint.textContent = 'Minimum 6 characters';
-        strengthText.textContent = '';
-        meterBar.style.width = '0%';
-        return false;
-      }
-      const basic = val.length >= 6;
-      const score = scorePassword(val);
-      meterBar.style.width = score + '%';
-      strengthText.textContent = 'Strength: ' + strengthLabel(score);
-      if (basic){
-        add(pwField,'valid'); rm(pwField,'invalid');
-        pwHint.textContent = 'Password looks OK';
-        pwHint.className = 'hint ok';
-      } else {
-        add(pwField,'invalid'); rm(pwField,'valid');
-        pwHint.textContent = 'At least 6 characters';
-        pwHint.className = 'hint error';
-      }
-      return basic;
-    }
-    pw.addEventListener('input', ()=> { validatePassword(); updateSubmitState(); });
-
-    // Enable submit when valid
-    function updateSubmitState(){
-      submitBtn.disabled = !(validateEmail() && validatePassword());
-    }
-
-    // Enter key submit
-    [email, pw].forEach(el=> el.addEventListener('keydown', (e)=>{
-      if (e.key === 'Enter' && !submitBtn.disabled){
-        e.preventDefault(); submitBtn.click();
-      }
-    }));
-
-    // Fake submit (demo)
-    form.addEventListener('submit', async (e)=>{
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
-      if (submitBtn.disabled) return;
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
 
-      // Accessibility live area
-      strengthText.setAttribute('aria-live', 'polite');
+      loginBtn.disabled = true;
+      msg.textContent = "⏳ Logging in...";
 
-      submitBtn.classList.add('loading');
-      const originalText = submitBtn.firstChild.nodeValue;
-      submitBtn.firstChild.nodeValue = 'Signing in';
-
-      // Simulate async work
-      await new Promise(r=> setTimeout(r, 1200));
-
-      // Demo success animation
-      submitBtn.classList.remove('loading');
-      submitBtn.classList.add('success');
-      submitBtn.firstChild.nodeValue = 'Welcome';
-      // Clear fields and reset after a moment
-      await new Promise(r=> setTimeout(r, 900));
-      submitBtn.classList.remove('success');
-      submitBtn.firstChild.nodeValue = originalText;
-
-      // Here you would normally send credentials to your backend
-      // For demo, we just reset the form:
-      // console.log({ email: email.value, password: pw.value, remember: remember.checked });
-      form.reset();
-      document.querySelector('label.toggle .switch').setAttribute('aria-checked','false');
-      rm(emailField,'valid'); rm(pwField,'valid');
-      meterBar.style.width = '0%';
-      strengthText.textContent = '';
-      updateSubmitState();
+      try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        msg.textContent = "✅ Login successful! Redirecting...";
+        setTimeout(() => {
+          window.location.href = "/dashboard.html"; // 🔄 change to your page
+        }, 1200);
+      } catch (error) {
+        msg.textContent = "❌ " + error.message;
+      } finally {
+        loginBtn.disabled = false;
+      }
     });
-
-    // Links (placeholder actions)
-    $('#forgot').addEventListener('click', (e)=>{ e.preventDefault(); alert('Password reset flow goes here.'); });
-    $('#create').addEventListener('click', (e)=>{ e.preventDefault(); alert('Sign-up flow goes here.'); });
-
-    // Initialize
-    validateEmail(); validatePassword(); updateSubmitState();
   </script>
 </body>
 </html>
